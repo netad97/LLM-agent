@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using UnityEngine.Events;
 
 namespace OpenAI
 {
@@ -17,7 +18,10 @@ namespace OpenAI
         private OpenAIApi openai = new OpenAIApi();
 
         private List<ChatMessage> messages = new List<ChatMessage>();
-        private string prompt = "Act as a random stranger in a chat room and reply to the questions. Don't break character. Don't ever mention that you are an AI model.";
+        private string prompt = "Act as an avatar in the Metaverse, that lives in a Unity game engine scene and helps visitors find answers to their questions +" +
+            "using her connection to OpenAI. Don't break character. Don't ever mention that you are an AI model. Please keep you answers short.";
+
+        public UnityEvent OnReplyRecieved;
 
         private void Start()
         {
@@ -62,6 +66,8 @@ namespace OpenAI
                 Messages = messages
             });
 
+            OnReplyRecieved.Invoke();
+            
             if (completionResponse.Choices != null && completionResponse.Choices.Count > 0)
             {
                 var message = completionResponse.Choices[0].Message;
